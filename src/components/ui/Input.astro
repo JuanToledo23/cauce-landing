@@ -1,0 +1,34 @@
+---
+interface Props {
+  name: string;
+  type?: 'text' | 'email';
+  placeholder?: string;
+  label: string;
+  required?: boolean;
+  errorMessage?: string;
+  id?: string;
+}
+
+const { name, type = 'text', placeholder, label, required = false, errorMessage, id } = Astro.props;
+const inputId = id || `field-${name}`;
+---
+
+<div class="flex flex-col gap-1">
+  <label for={inputId} class="type-label text-stone">{label}</label>
+  <input
+    id={inputId}
+    name={name}
+    type={type}
+    placeholder={placeholder}
+    required={required}
+    autocomplete={type === 'email' ? 'email' : name === 'nombre' ? 'name' : 'organization'}
+    class="h-14 bg-paper border border-stone rounded-none px-4 type-body text-ink
+           placeholder:text-stone
+           focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink
+           aria-[invalid=true]:border-error"
+    aria-describedby={errorMessage ? `${inputId}-error` : undefined}
+  />
+  {errorMessage && (
+    <p id={`${inputId}-error`} class="type-caption text-error" role="alert">{errorMessage}</p>
+  )}
+</div>

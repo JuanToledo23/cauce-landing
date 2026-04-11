@@ -1,0 +1,182 @@
+---
+// Importar fuentes via Fontsource — Astro las procesa a través de Vite
+// y genera las URLs correctas con hash de contenido en producción.
+// NO hardcodear paths de /node_modules — usar import estático.
+import '@fontsource-variable/fraunces/wght-italic.css';
+import '@fontsource-variable/instrument-sans/wght.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  abVariant?: 'A' | 'B' | 'C';
+}
+
+const {
+  title = 'Cauce — Consultora de Producto Digital y Marca',
+  description = 'Investigamos el problema real. Construimos lo que funciona. Estrategia, diseño y desarrollo para PYMES mexicanas.',
+  ogImage = '/og-image.png',
+  abVariant = 'A',
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(ogImage, Astro.site);
+---
+
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#F6F3EE" />
+
+  <!-- SEO -->
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImageUrl} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_MX" />
+
+  <!-- Twitter/X Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImageUrl} />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- Sitemap -->
+  <link rel="sitemap" href="/sitemap-index.xml" />
+
+  <!-- Analytics — carga async, no bloquea render -->
+  <script
+    is:inline
+    define:vars={{
+      phKey: import.meta.env.PUBLIC_POSTHOG_KEY,
+      ga4Id: import.meta.env.PUBLIC_GA4_MEASUREMENT_ID,
+      abVariant,
+    }}
+  >
+    // Posthog — init con cookie de primera parte para A/B persistente
+    !(function (t, e) {
+      var o, n, p, r;
+      e.__SV ||
+        ((window.posthog = e),
+        (e._i = []),
+        (e.init = function (i, s, a) {
+          function g(t, e) {
+            var o = e.split('.');
+            2 == o.length && ((t = t[o[0]]), (e = o[1])),
+              (t[e] = function () {
+                t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+              });
+          }
+          ((p = t.createElement('script')).type = 'text/javascript'),
+            (p.async = !0),
+            (p.src =
+              s.api_host.replace('.i.posthog.com', '-assets.i.posthog.com') +
+              '/static/array.js'),
+            (r = t.getElementsByTagName('script')[0]).parentNode.insertBefore(p, r);
+          var u = e;
+          for (
+            void 0 !== a ? (u = e[a] = []) : (a = 'posthog'),
+              u.people = u.people || [],
+              u.toString = function (t) {
+                var e = 'posthog';
+                return 'posthog' !== a && (e += '.' + a), t || (e += ' (stub)'), e;
+              },
+              u.people.toString = function () {
+                return u.toString(1) + '.people (stub)';
+              },
+              o =
+                'capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId'.split(
+                  ' '
+                ),
+              n = 0;
+            n < o.length;
+            n++
+          )
+            g(u, o[n]);
+          e._i.push([i, s, a]);
+        }),
+        (e.__SV = 1));
+    })(document, window.posthog || []);
+
+    if (phKey) {
+      posthog.init(phKey, {
+        api_host: 'https://app.posthog.com',
+        capture_pageview: false, // pageview manual para incluir ab_variant
+        persistence: 'cookie',
+      });
+    }
+
+    // Leer o asignar variante A/B
+    // Cookie de primera parte previene FOVC en visitas subsiguientes
+    let variant = document.cookie.match(/cauce_ab=([ABC])/)?.[1];
+    if (!variant) {
+      if (phKey && typeof posthog.onFeatureFlags === 'function') {
+        posthog.onFeatureFlags(function () {
+          variant = posthog.getFeatureFlag('hero-ab-test') || abVariant || 'A';
+          document.cookie = `cauce_ab=${variant};max-age=2592000;path=/;samesite=lax`;
+          document.dispatchEvent(
+            new CustomEvent('ab:ready', { detail: { variant } })
+          );
+        });
+      } else {
+        variant = abVariant || 'A';
+        document.cookie = `cauce_ab=${variant};max-age=2592000;path=/;samesite=lax`;
+        document.dispatchEvent(
+          new CustomEvent('ab:ready', { detail: { variant } })
+        );
+      }
+    } else {
+      // Variante ya conocida — aplicar sin esperar a Posthog
+      document.dispatchEvent(
+        new CustomEvent('ab:ready', { detail: { variant } })
+      );
+    }
+
+    // GA4
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    if (ga4Id) {
+      gtag('config', ga4Id, { send_page_view: false });
+    }
+
+    // page_view manual con ab_variant
+    const params = new URLSearchParams(window.location.search);
+    const utmSource = params.get('utm_source') || '';
+    const utmMedium = params.get('utm_medium') || '';
+    const utmCampaign = params.get('utm_campaign') || '';
+    const pvProps = {
+      ab_variant: variant || abVariant || 'A',
+      utm_source: utmSource,
+      utm_medium: utmMedium,
+      utm_campaign: utmCampaign,
+    };
+    if (phKey) posthog.capture('page_view', pvProps);
+    if (ga4Id) gtag('event', 'page_view', pvProps);
+  </script>
+  {import.meta.env.PUBLIC_GA4_MEASUREMENT_ID && (
+    <script
+      async
+      src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA4_MEASUREMENT_ID}`}
+    ></script>
+  )}
+</head>
+<body class="bg-paper text-ink font-body antialiased">
+  <slot />
+</body>
+</html>

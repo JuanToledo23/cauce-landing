@@ -1,0 +1,39 @@
+---
+interface Props {
+  variant?: 'primary' | 'text';
+  type?: 'button' | 'submit';
+  href?: string;
+  class?: string;
+  id?: string;
+}
+
+const { variant = 'primary', type = 'button', href, class: className = '', id } = Astro.props;
+---
+
+{href ? (
+  <a
+    href={href}
+    id={id}
+    class:list={[
+      'type-cta inline-flex items-center justify-center rounded-none transition-colors',
+      variant === 'primary' && 'bg-accent text-paper px-8 h-14 w-full hover:bg-accent-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+      variant === 'text' && 'text-stone underline-offset-2 hover:text-ink',
+      className
+    ]}
+  >
+    <slot />
+  </a>
+) : (
+  <button
+    type={type}
+    id={id}
+    class:list={[
+      'type-cta inline-flex items-center justify-center rounded-none transition-colors',
+      variant === 'primary' && 'bg-accent text-paper px-8 h-14 w-full hover:bg-accent-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:bg-disabled disabled:cursor-not-allowed',
+      variant === 'text' && 'text-stone hover:text-ink',
+      className
+    ]}
+  >
+    <slot />
+  </button>
+)}

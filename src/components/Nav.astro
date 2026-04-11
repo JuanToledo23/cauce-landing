@@ -1,0 +1,45 @@
+---
+import Button from './ui/Button.astro';
+---
+
+<nav
+  class="sticky top-0 z-50 bg-paper border-b border-mist h-14 px-5 lg:px-16 flex justify-between items-center"
+>
+  <!-- LEFT: wordmark -->
+  <a href="/" class="wordmark" aria-label="Cauce — inicio">cauce</a>
+
+  <!-- CENTER: desktop-only nav links -->
+  <div class="hidden lg:flex lg:gap-8">
+    <a
+      href="#como-trabajamos"
+      class="type-small text-stone hover:text-ink transition-colors"
+    >
+      Cómo trabajamos
+    </a>
+    <a
+      href="#servicios"
+      class="type-small text-stone hover:text-ink transition-colors"
+    >
+      Servicios
+    </a>
+    <a
+      href="#el-equipo"
+      class="type-small text-stone hover:text-ink transition-colors"
+    >
+      El equipo
+    </a>
+  </div>
+
+  <!-- RIGHT: mobile link + desktop Button -->
+  <a
+    href="#auditoria"
+    class="type-label text-accent lg:hidden"
+  >
+    Auditoría gratis →
+  </a>
+  <div class="hidden lg:block">
+    <Button variant="primary" href="#auditoria" class="w-auto h-10 px-5 text-sm">
+      Auditoría gratis →
+    </Button>
+  </div>
+</nav>

@@ -1,0 +1,166 @@
+---
+import Button from './ui/Button.astro';
+import Input from './ui/Input.astro';
+---
+
+<section
+  id="auditoria"
+  class="bg-mist pt-16 pb-16 px-5 lg:px-16"
+  data-section="cta"
+>
+  <div class="max-w-screen-xl mx-auto">
+    <div class="max-w-[520px] mx-auto">
+
+      <h2 class="type-h1 text-ink">Auditoría Express Gratuita</h2>
+      <p class="type-body text-stone mt-4">
+        48 horas. Sin compromiso.<br>
+        Te decimos qué está roto y qué vale la pena arreglar.
+      </p>
+
+      <!-- Formulario — state: idle (inicial) -->
+      <form
+        id="auditoria-form"
+        class="mt-8 flex flex-col gap-4"
+        novalidate
+        aria-label="Formulario de auditoría express"
+      >
+        <Input name="nombre" label="Nombre completo" placeholder="Tu nombre" required />
+        <Input name="empresa" label="Empresa o proyecto" placeholder="Nombre de tu empresa" required />
+        <Input name="correo" type="email" label="Correo electrónico" placeholder="tu@empresa.com" required />
+
+        <Button type="submit" id="form-submit">
+          <span id="btn-text">Quiero mi auditoría →</span>
+          <span id="btn-loading" class="hidden">Enviando...</span>
+        </Button>
+      </form>
+
+      <!-- Estado success (hidden por defecto) -->
+      <div id="form-success" class="hidden mt-8" role="status" aria-live="polite">
+        <p class="type-h3 text-ink">Recibimos tu solicitud.</p>
+        <p class="type-body text-stone mt-2">Te escribimos en las próximas 24 horas.</p>
+      </div>
+
+      <!-- Estado error (hidden por defecto) -->
+      <div id="form-error" class="hidden mt-4" role="alert">
+        <p class="type-caption text-error">
+          Algo falló al enviar. Escríbenos directamente a
+          <a href="mailto:hola@cauce.mx" class="underline">hola@cauce.mx</a>
+        </p>
+      </div>
+
+      <!-- Alt WhatsApp -->
+      <p class="mt-6 text-center">
+        <a
+          href="/whatsapp?from=cta"
+          id="cta-whatsapp"
+          class="type-small text-stone hover:text-ink transition-colors"
+          target="_blank"
+          rel="noopener"
+        >
+          Prefiero WhatsApp →
+        </a>
+      </p>
+
+      <!-- Aviso de privacidad — H05 resuelto -->
+      <p class="type-caption text-stone mt-4 text-center">
+        Al enviar aceptas nuestro
+        <a href="/privacidad" class="underline hover:text-ink">Aviso de privacidad</a>.
+        Respondemos en menos de 24 horas.
+      </p>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  import { trackEvent } from '../utils/analytics';
+
+  const form = document.getElementById('auditoria-form') as HTMLFormElement | null;
+  const submitBtn = document.getElementById('form-submit') as HTMLButtonElement | null;
+  const btnText = document.getElementById('btn-text') as HTMLSpanElement | null;
+  const btnLoading = document.getElementById('btn-loading') as HTMLSpanElement | null;
+  const successEl = document.getElementById('form-success') as HTMLDivElement | null;
+  const errorEl = document.getElementById('form-error') as HTMLDivElement | null;
+
+  if (form && submitBtn && btnText && btnLoading && successEl && errorEl) {
+    let formStarted = false;
+    const abVariant = document.querySelector('[data-variant]')?.getAttribute('data-variant') || 'A';
+
+    // Tracking form_start — primer focus
+    form.addEventListener('focusin', () => {
+      if (formStarted) return;
+      formStarted = true;
+      trackEvent('form_start', {
+        ab_variant: abVariant,
+        first_field: (document.activeElement as HTMLInputElement)?.name || '',
+      });
+    }, { once: true });
+
+    // Tracking whatsapp_click desde CTA
+    document.getElementById('cta-whatsapp')?.addEventListener('click', () => {
+      trackEvent('whatsapp_click', { ab_variant: abVariant, cta_location: 'cta_section' });
+    });
+
+    // Submit handler
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Validación client-side
+      const nombre = (form.elements.namedItem('nombre') as HTMLInputElement).value.trim();
+      const empresa = (form.elements.namedItem('empresa') as HTMLInputElement).value.trim();
+      const correo = (form.elements.namedItem('correo') as HTMLInputElement).value.trim();
+
+      if (!nombre || !empresa || !correo || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+        if (!nombre) (form.elements.namedItem('nombre') as HTMLInputElement).setAttribute('aria-invalid', 'true');
+        if (!empresa) (form.elements.namedItem('empresa') as HTMLInputElement).setAttribute('aria-invalid', 'true');
+        if (!correo || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+          (form.elements.namedItem('correo') as HTMLInputElement).setAttribute('aria-invalid', 'true');
+        }
+        return;
+      }
+
+      // Estado loading
+      submitBtn.disabled = true;
+      btnText.classList.add('hidden');
+      btnLoading.classList.remove('hidden');
+
+      const params = new URLSearchParams(window.location.search);
+      const utmSource = params.get('utm_source') || '';
+      const utmMedium = params.get('utm_medium') || '';
+      const utmCampaign = params.get('utm_campaign') || '';
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre,
+            empresa,
+            correo,
+            ab_variant: abVariant,
+            utm_source: utmSource,
+            utm_medium: utmMedium,
+          }),
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        // Éxito
+        form.classList.add('hidden');
+        successEl.classList.remove('hidden');
+        trackEvent('form_submit', {
+          ab_variant: abVariant,
+          utm_source: utmSource,
+          utm_campaign: utmCampaign,
+        });
+
+      } catch (err) {
+        // Error — mostrar fallback con email directo
+        errorEl.classList.remove('hidden');
+        submitBtn.disabled = false;
+        btnText.classList.remove('hidden');
+        btnLoading.classList.add('hidden');
+      }
+    });
+  }
+</script>

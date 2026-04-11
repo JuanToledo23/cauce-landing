@@ -1,0 +1,42 @@
+---
+const pasos = [
+  {
+    num: '01',
+    title: 'Research primero',
+    body: 'Antes de diseñar o construir, entendemos el problema real. Entrevistas, análisis de métricas, benchmarking. Así sabemos qué vale la pena resolver — y qué no.'
+  },
+  {
+    num: '02',
+    title: 'Especificación',
+    body: 'Antes de escribir una línea de código o diseño, todo está documentado. Qué se construye, cómo se evalúa, qué queda fuera. Sin sorpresas a la mitad del proyecto.'
+  },
+  {
+    num: '03',
+    title: 'Construcción acelerada',
+    body: 'Ejecutamos con un equipo completo. Metodología que reduce los tiempos sin reducir la calidad. Cada avance es visible y testeable. En semanas, no en trimestres.'
+  },
+];
+---
+
+<section id="como-trabajamos" class="pt-16 pb-16 px-5 lg:px-16">
+  <div class="max-w-screen-xl mx-auto">
+
+    <p class="type-label text-stone mb-8">CÓMO TRABAJAMOS</p>
+
+    <!-- Mobile: headline visible. Desktop: oculto (los 3 pasos en columnas hablan solos) -->
+    <h2 class="type-h2 text-ink mb-12 lg:hidden">
+      Tres pasos. En ese orden. Sin saltarse ninguno.
+    </h2>
+
+    <div class="flex flex-col gap-12 lg:grid lg:grid-cols-3 lg:gap-8">
+      {pasos.map(paso => (
+        <div>
+          <span class="type-display text-mist block" aria-hidden="true">{paso.num}</span>
+          <h3 class="type-h3 text-ink mt-2">{paso.title}</h3>
+          <p class="type-body text-stone mt-3 max-w-[320px] lg:max-w-none">{paso.body}</p>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

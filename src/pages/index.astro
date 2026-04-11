@@ -1,17 +1,47 @@
 ---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Problema from '../components/Problema.astro';
+import Metodologia from '../components/Metodologia.astro';
+import Servicios from '../components/Servicios.astro';
+import PruebaSocial from '../components/PruebaSocial.astro';
+import CTAPrincipal from '../components/CTAPrincipal.astro';
+import Footer from '../components/Footer.astro';
 
+// La variante por defecto es A — el script de Base.astro puede actualizar el DOM
+const defaultVariant = 'A' as const;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base>
+  <Nav />
+  <main>
+    <Hero abVariant={defaultVariant} />
+    <Problema />
+    <Metodologia />
+    <Servicios />
+    <PruebaSocial />
+    <CTAPrincipal />
+  </main>
+  <Footer />
+</Base>
+
+<script>
+  // Inicializar scroll depth tracking después de que el DOM esté listo
+  import { initScrollDepth } from '../utils/analytics';
+
+  let initialized = false;
+  const init = (variant: string) => {
+    if (initialized) return;
+    initialized = true;
+    initScrollDepth(variant);
+  };
+
+  document.addEventListener('ab:ready', ((e: Event) => {
+    const detail = (e as CustomEvent).detail as { variant: string };
+    init(detail.variant);
+  }) as EventListener);
+
+  // Si ab:ready no llega en 1s (Posthog bloqueado), inicializar con A
+  setTimeout(() => init('A'), 1000);
+</script>

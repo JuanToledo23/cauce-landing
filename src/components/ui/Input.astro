@@ -1,7 +1,7 @@
 ---
 interface Props {
   name: string;
-  type?: 'text' | 'email';
+  type?: 'text' | 'email' | 'tel';
   placeholder?: string;
   label: string;
   required?: boolean;
@@ -21,7 +21,7 @@ const inputId = id || `field-${name}`;
     type={type}
     placeholder={placeholder}
     required={required}
-    autocomplete={type === 'email' ? 'email' : name === 'nombre' ? 'name' : 'organization'}
+    autocomplete={type === 'email' ? 'email' : type === 'tel' ? 'tel' : name === 'nombre' ? 'name' : 'organization'}
     class="h-14 bg-white border border-[#E0DDD6] rounded-lg px-4 type-body text-[#1A1A18]
            placeholder:text-[#A1A19A]
            focus:outline-none focus:border-[#1D9E75] focus:ring-1 focus:ring-[#1D9E75]

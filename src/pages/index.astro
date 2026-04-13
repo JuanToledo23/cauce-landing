@@ -27,8 +27,13 @@ const defaultVariant = 'A' as const;
 </Base>
 
 <script>
-  // Inicializar scroll depth tracking después de que el DOM esté listo
+  // Inicializar scroll depth tracking y scroll reveal
   import { initScrollDepth } from '../utils/analytics';
+  import { initScrollReveal } from '../utils/animations';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initScrollReveal();
+  });
 
   let initialized = false;
   const init = (variant: string) => {

@@ -10,49 +10,56 @@ import Input from './ui/Input.astro';
   style="background-color: #F0EDE7"
 >
   <div class="max-w-screen-xl mx-auto">
-    <div class="max-w-[520px] mx-auto">
+    <div class="max-w-[520px] mx-auto reveal-stagger">
 
-      <h2 class="type-h1" style="color: #0A0A0A">Auditoría Express Gratuita</h2>
-      <p class="type-body mt-4" style="color: #4A4A4A">
-        48 horas. Sin compromiso.<br>
+      <h2 class="type-h1 reveal-element" style="color: #0A0A0A">Diagnóstico Express Gratuito</h2>
+      <p class="type-body mt-4 reveal-element" style="color: #4A4A4A">
+        Sin compromiso.<br>
         Te decimos qué está roto y qué vale la pena arreglar.
       </p>
 
       <!-- Formulario — state: idle (inicial) -->
       <form
         id="auditoria-form"
-        class="mt-8 flex flex-col gap-4"
+        class="mt-8 flex flex-col gap-4 reveal-element" style="transition-delay: 300ms"
         novalidate
-        aria-label="Formulario de auditoría express"
+        aria-label="Formulario de diagnóstico express"
       >
         <Input name="nombre" label="Nombre completo" placeholder="Tu nombre" required />
         <Input name="empresa" label="Empresa o proyecto" placeholder="Nombre de tu empresa" required />
         <Input name="correo" type="email" label="Correo electrónico" placeholder="tu@empresa.com" required />
+        <Input name="telefono" type="tel" label="Teléfono" placeholder="55 1234 5678" required />
 
-        <Button type="submit" id="form-submit">
-          <span id="btn-text">Quiero mi auditoría →</span>
+        <Button type="submit" id="form-submit" class="cta-pulse">
+          <span id="btn-text">Quiero mi diagnóstico →</span>
           <span id="btn-loading" class="hidden">Enviando...</span>
         </Button>
       </form>
 
       <!-- Estado success (hidden por defecto) -->
-      <div id="form-success" class="hidden mt-8" role="status" aria-live="polite">
-        <p class="type-h3" style="color: #0A0A0A">Recibimos tu solicitud.</p>
-        <p class="type-body mt-2" style="color: #4A4A4A">Te escribimos en las próximas 24 horas.</p>
+      <div id="form-success" class="hidden mt-10" role="status" aria-live="polite">
+        <div class="rounded-lg p-8 text-center" style="background-color: #0D1F17">
+          <svg width="110" height="193" viewBox="0 0 110 193" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 w-auto mx-auto mb-5">
+            <path d="M92.8125 96.25L23.2031 179.605L23.2031 12.8951L92.8125 96.25Z" fill="#F8F7F4"/>
+            <path d="M110 96L61.25 140.167L61.25 51.8327L110 96Z" fill="#1D9E75"/>
+          </svg>
+          <p class="type-h3" style="color: #F8F7F4">Recibimos tu solicitud.</p>
+          <p class="type-body mt-3" style="color: #7A8C82">Te escribimos en las próximas 24 horas.</p>
+        </div>
       </div>
 
       <!-- Estado error (hidden por defecto) -->
       <div id="form-error" class="hidden mt-4" role="alert">
         <p class="type-caption" style="color: #C0392B">
           Algo falló al enviar. Escríbenos directamente a
-          <a href="mailto:hola@cauce.mx" class="underline">hola@cauce.mx</a>
+          <a href="mailto:holacaucemx@gmail.com" class="underline">holacaucemx@gmail.com</a>
         </p>
       </div>
 
       <!-- Alt WhatsApp -->
       <p class="mt-6 text-center">
         <a
-          href="/whatsapp?from=cta"
+          href="/api/whatsapp?from=cta"
           id="cta-whatsapp"
           class="type-small transition-colors"
           style="color: #4A4A4A"
@@ -111,13 +118,15 @@ import Input from './ui/Input.astro';
       const nombre = (form.elements.namedItem('nombre') as HTMLInputElement).value.trim();
       const empresa = (form.elements.namedItem('empresa') as HTMLInputElement).value.trim();
       const correo = (form.elements.namedItem('correo') as HTMLInputElement).value.trim();
+      const telefono = (form.elements.namedItem('telefono') as HTMLInputElement).value.trim();
 
-      if (!nombre || !empresa || !correo || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+      if (!nombre || !empresa || !correo || !telefono || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
         if (!nombre) (form.elements.namedItem('nombre') as HTMLInputElement).setAttribute('aria-invalid', 'true');
         if (!empresa) (form.elements.namedItem('empresa') as HTMLInputElement).setAttribute('aria-invalid', 'true');
         if (!correo || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
           (form.elements.namedItem('correo') as HTMLInputElement).setAttribute('aria-invalid', 'true');
         }
+        if (!telefono) (form.elements.namedItem('telefono') as HTMLInputElement).setAttribute('aria-invalid', 'true');
         return;
       }
 
@@ -139,6 +148,7 @@ import Input from './ui/Input.astro';
             nombre,
             empresa,
             correo,
+            telefono,
             ab_variant: abVariant,
             utm_source: utmSource,
             utm_medium: utmMedium,

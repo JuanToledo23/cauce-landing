@@ -3,24 +3,28 @@
     <div class="flex flex-col gap-6 lg:flex-row lg:justify-between lg:items-end">
 
       <div class="flex flex-col gap-3">
-        <!-- Logo SVG -->
-        <img src="/logo/cauce.svg" alt="Cauce" class="h-7 w-auto" />
+        <!-- Logo + wordmark -->
+        <div class="flex items-center gap-2">
+          <svg width="110" height="193" viewBox="0 0 110 193" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-auto" style="overflow: visible">
+            <path d="M92.8125 96.25L23.2031 179.605L23.2031 12.8951L92.8125 96.25Z" fill="#F8F7F4"/>
+            <path d="M110 96L61.25 140.167L61.25 51.8327L110 96Z" fill="#1D9E75"/>
+          </svg>
+          <span style="font-family: 'Plus Jakarta Sans Variable', system-ui, sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -0.03em; color: #F8F7F4">cauce</span>
+        </div>
 
-        <a href="mailto:hola@cauce.mx" class="type-body text-paper hover:text-mist transition-colors">
-          hola@cauce.mx
+        <a href="mailto:holacaucemx@gmail.com" class="type-body transition-colors" style="color: #F8F7F4">
+          holacaucemx@gmail.com
         </a>
-        <p class="type-small text-stone">Ciudad de México · México</p>
+        <p class="type-small" style="color: #7A8C82">Ciudad de México · México</p>
       </div>
 
       <div class="flex flex-col gap-2 lg:text-right">
-        <!-- H09: "El equipo" en lugar de "Casos" en bootstrap -->
         <nav aria-label="Footer" class="flex gap-6 lg:justify-end">
-          <a href="#servicios" class="type-small text-stone hover:text-paper transition-colors">Servicios</a>
-          <a href="#como-trabajamos" class="type-small text-stone hover:text-paper transition-colors">Cómo trabajamos</a>
-          <a href="/privacidad" class="type-small text-stone hover:text-paper transition-colors">Privacidad</a>
+          <a href="#servicios" class="type-small transition-colors" style="color: #7A8C82">Servicios</a>
+          <a href="#como-trabajamos" class="type-small transition-colors" style="color: #7A8C82">Cómo trabajamos</a>
+          <a href="/privacidad" class="type-small transition-colors" style="color: #7A8C82">Privacidad</a>
         </nav>
-        <!-- Sin redes sociales en lanzamiento — AP-15 -->
-        <p class="type-caption text-stone">
+        <p class="type-caption" style="color: #5A6B62">
           © 2026 Cauce · Todos los derechos reservados
         </p>
       </div>

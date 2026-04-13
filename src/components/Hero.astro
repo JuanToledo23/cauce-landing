@@ -8,20 +8,30 @@ import { heroVariants } from '../data/ab-variants';
 const defaultVariant = heroVariants[abVariant] || heroVariants['A'];
 ---
 
-<section id="hero" class="hero-bg pt-20 pb-20 px-5 lg:px-16">
-  <div class="max-w-2xl mx-auto">
+<section id="hero" class="hero-bg pt-20 pb-20 px-5 lg:px-16 relative overflow-hidden">
 
-    <!-- Badge de contexto -->
-    <div class="badge mb-8 w-fit">
-      <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#1D9E75]"></span>
-      Research · Diseño · Desarrollo
-    </div>
+  <!-- Logo SVG ambiental de fondo — parallax con scroll -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none" style="z-index: 0" aria-hidden="true">
+    <svg
+      id="hero-bg-logo"
+      viewBox="0 0 110 193"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      class="absolute hidden lg:block"
+      style="right: -2%; top: 15%; height: 90vh; width: auto; opacity: 0.05; transition: transform 0.1s linear"
+    >
+      <path d="M92.8125 96.25L23.2031 179.605L23.2031 12.8951L92.8125 96.25Z" fill="#F8F7F4"/>
+      <path d="M110 96L61.25 140.167L61.25 51.8327L110 96Z" fill="#1D9E75" style="opacity: 0.4"/>
+    </svg>
+  </div>
+
+  <div class="max-w-2xl mx-auto relative" style="z-index: 1">
 
     <!-- Statement principal A/B -->
     <h1
       id="hero-statement"
-      class="type-display"
-      style="color: #F8F7F4"
+      class="type-display hero-animate"
+      style="color: #F8F7F4; animation-delay: 100ms"
       data-variant={abVariant}
     >
       {defaultVariant.statement.map(line => <span class="block">{line}</span>)}
@@ -29,14 +39,14 @@ const defaultVariant = heroVariants[abVariant] || heroVariants['A'];
 
     <p
       id="hero-sub"
-      class="type-body-lg mt-6 max-w-[460px]"
-      style="color: #7A8C82"
+      class="type-body-lg mt-6 max-w-[460px] hero-animate"
+      style="color: #7A8C82; animation-delay: 220ms"
     >
       {defaultVariant.subStatement}
     </p>
 
     <!-- CTAs -->
-    <div class="mt-10 flex flex-col gap-4 lg:flex-row lg:items-center">
+    <div class="mt-10 flex flex-col gap-4 lg:flex-row lg:items-center hero-animate" style="animation-delay: 340ms">
       <a
         href="#auditoria"
         id="hero-cta"
@@ -45,10 +55,10 @@ const defaultVariant = heroVariants[abVariant] || heroVariants['A'];
                hover:bg-[#178A65] active:scale-[0.98] transition-all duration-150
                lg:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9E75]"
       >
-        Quiero mi auditoría →
+        Quiero mi diagnóstico →
       </a>
       <a
-        href="/whatsapp?from=hero"
+        href="/api/whatsapp?from=hero"
         id="hero-whatsapp"
         class="type-small text-center transition-colors lg:text-left"
         style="color: #7A8C82"
@@ -59,15 +69,15 @@ const defaultVariant = heroVariants[abVariant] || heroVariants['A'];
       </a>
     </div>
 
-    <!-- Separador sutil -->
-    <div class="mt-10 border-t" style="border-color: #1E3D2E"></div>
-
-    <!-- Prueba social: proyectos reales -->
-    <div class="mt-6">
-      <p class="type-small" style="color: #4A5C52">
-        Han confiado en el equipo:
-        <span style="color: #3A6B52">MAJA Sportswear · BrightPath · Klu · New Era Latam</span>
-      </p>
+    <!-- Separador + prueba social -->
+    <div class="hero-animate" style="animation-delay: 460ms">
+      <div class="mt-10 border-t" style="border-color: #1E3D2E"></div>
+      <div class="mt-6">
+        <p class="type-small" style="color: #4A5C52">
+          Han confiado en el equipo:
+          <span style="color: #3A6B52">MAJA Sportswear · BrightPath · Klu · New Era Latam</span>
+        </p>
+      </div>
     </div>
 
   </div>
@@ -101,4 +111,13 @@ const defaultVariant = heroVariants[abVariant] || heroVariants['A'];
     const variant = document.getElementById('hero-statement')?.dataset.variant || 'A';
     trackEvent('whatsapp_click', { ab_variant: variant, cta_location: 'hero' });
   });
+
+  // Parallax: el logo de fondo se mueve más lento que el scroll
+  const bgLogo = document.getElementById('hero-bg-logo');
+  if (bgLogo) {
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      bgLogo.style.transform = `translateX(${y * -0.15}px)`;
+    }, { passive: true });
+  }
 </script>

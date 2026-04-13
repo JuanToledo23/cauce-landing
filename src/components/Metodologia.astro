@@ -21,17 +21,17 @@ const pasos = [
 <section id="como-trabajamos" class="pt-16 pb-16 px-5 lg:px-16" style="background-color: #0D1F17; color: #F8F7F4">
   <div class="max-w-screen-xl mx-auto">
 
-    <p class="type-label mb-8" style="color: #7A8C82">CÓMO TRABAJAMOS</p>
+    <p class="type-label mb-8 reveal-element" style="color: #7A8C82">CÓMO TRABAJAMOS</p>
 
     <!-- Mobile: headline visible. Desktop: oculto (los 3 pasos en columnas hablan solos) -->
-    <h2 class="type-h2 mb-12 lg:hidden" style="color: #F8F7F4">
+    <h2 class="type-h2 mb-12 lg:hidden reveal-element" style="color: #F8F7F4">
       Tres pasos. En ese orden. Sin saltarse ninguno.
     </h2>
 
-    <div class="flex flex-col gap-12 lg:grid lg:grid-cols-3 lg:gap-8">
+    <div class="flex flex-col gap-12 lg:grid lg:grid-cols-3 lg:gap-8 reveal-stagger">
       {pasos.map(paso => (
-        <div>
-          <span class="type-display block" style="color: #1D9E75" aria-hidden="true">{paso.num}</span>
+        <div class="reveal-element">
+          <span class="type-display block reveal-number" style="color: #1D9E75" aria-hidden="true">{paso.num}</span>
           <h3 class="type-h3 mt-2" style="color: #F8F7F4">{paso.title}</h3>
           <p class="type-body mt-3 max-w-[320px] lg:max-w-none" style="color: #7A8C82">{paso.body}</p>
         </div>

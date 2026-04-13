@@ -27,7 +27,7 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonResponse({ error: 'Payload inválido' }, 400);
   }
 
-  const { nombre, empresa, correo, ab_variant, utm_source, utm_medium } = body;
+  const { nombre, empresa, correo, telefono, ab_variant, utm_source, utm_medium } = body;
 
   if (!nombre?.trim() || !empresa?.trim() || !correo?.trim() || !isValidEmail(correo)) {
     return jsonResponse({ error: 'Campos inválidos' }, 400);
@@ -69,17 +69,16 @@ export const POST: APIRoute = async ({ request }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Cauce Leads <leads@cauce.mx>',
+        from: 'Cauce Leads <onboarding@resend.dev>',
         to: CAUCE_EMAIL,
-        subject: `[Cauce] Nueva auditoría: ${empresa} — ${nombre}`,
+        subject: `[Cauce] Nuevo diagnóstico: ${empresa} — ${nombre}`,
         html: `
-          <p><strong>Nueva solicitud de auditoría express</strong></p>
+          <p><strong>Nueva solicitud de diagnóstico express</strong></p>
           <table>
             <tr><td><strong>Nombre:</strong></td><td>${nombre}</td></tr>
             <tr><td><strong>Empresa:</strong></td><td>${empresa}</td></tr>
             <tr><td><strong>Correo:</strong></td><td><a href="mailto:${correo}">${correo}</a></td></tr>
-            <tr><td><strong>Variante A/B:</strong></td><td>${ab_variant || 'A'}</td></tr>
-            <tr><td><strong>Origen:</strong></td><td>${utm_source || 'directo'} / ${utm_medium || '—'}</td></tr>
+            <tr><td><strong>Teléfono:</strong></td><td>${telefono || '—'}</td></tr>
             <tr><td><strong>Recibido:</strong></td><td>${timestamp} (CDMX)</td></tr>
           </table>
         `,
@@ -91,28 +90,30 @@ export const POST: APIRoute = async ({ request }) => {
   // Clasificación: una operación "falla" si la promesa fue rechazada
   // (error de red) O si el Response HTTP no es OK (ej. 401 sin API key).
   // fetch() no rechaza en errores HTTP por sí solo — hay que inspeccionar .ok.
-  const classify = (
+  const classify = async (
     result: PromiseSettledResult<Response>,
     label: string,
-  ): boolean => {
+  ): Promise<boolean> => {
     if (result.status === 'rejected') {
       console.error(`[cauce/contact] ${label} rechazó:`, result.reason);
       return true;
     }
     if (!result.value.ok) {
+      const errorBody = await result.value.text().catch(() => '');
       console.error(
         `[cauce/contact] ${label} HTTP ${result.value.status} ${result.value.statusText}`,
+        errorBody,
       );
       return true;
     }
     return false;
   };
 
-  const audienceFailed = classify(audienceResult, 'Resend Audiences');
-  const emailFailed = classify(emailResult, 'Resend Email');
+  const audienceFailed = await classify(audienceResult, 'Resend Audiences');
+  const emailFailed = await classify(emailResult, 'Resend Email');
 
   // Si el email de notificación falló, el equipo no se enterará — retornar error
-  // para que el cliente muestre el fallback con hola@cauce.mx.
+  // para que el cliente muestre el fallback con holacaucemx@gmail.com.
   if (emailFailed) {
     return jsonResponse({ error: 'No se pudo enviar la notificación' }, 500);
   }

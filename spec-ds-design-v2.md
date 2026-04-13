@@ -758,3 +758,4 @@ Con esta nueva dirección, el checklist de AP se actualiza en dos puntos:
 - Aviso de privacidad
 - robots.txt y sitemap
 - Toda la funcionalidad del SPEC-004 y SPEC-005
+

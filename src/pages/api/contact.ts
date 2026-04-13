@@ -69,7 +69,7 @@ export const POST: APIRoute = async ({ request }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Cauce Leads <onboarding@resend.dev>',
+        from: 'Cauce <leads@cauce.tech>',
         to: CAUCE_EMAIL,
         subject: `[Cauce] Nuevo diagnóstico: ${empresa} — ${nombre}`,
         html: `

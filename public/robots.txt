@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cauce.mx/sitemap-index.xml

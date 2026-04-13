@@ -1,45 +1,114 @@
 ---
-import Button from './ui/Button.astro';
+// Nav con comportamiento scroll-aware para adaptarse al hero oscuro
 ---
 
-<nav
-  class="sticky top-0 z-50 bg-paper border-b border-mist h-14 px-5 lg:px-16 flex justify-between items-center"
->
-  <!-- LEFT: wordmark -->
-  <a href="/" class="wordmark" aria-label="Cauce — inicio">cauce</a>
+<style>
+  /* Animación 1 — Entrada al cargar (una sola vez) */
+  @keyframes logo-fade-in {
+    from {
+      opacity: 0;
+      transform: translateX(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 
-  <!-- CENTER: desktop-only nav links -->
+  #logo-outer {
+    animation: logo-fade-in 500ms ease-out both;
+    transition: fill 300ms ease;
+  }
+
+  #logo-inner {
+    animation: logo-fade-in 400ms ease-out 150ms both;
+    transition: transform 200ms ease-in-out, fill 300ms ease;
+  }
+
+  /* Animación 2 — Hover: chevron verde se desplaza a la derecha */
+  #nav-wordmark:hover #logo-inner {
+    transform: translateX(3px);
+  }
+</style>
+
+<nav
+  id="main-nav"
+  class="sticky top-0 z-50 h-14 flex items-center justify-between px-5 lg:px-16
+         transition-all duration-300 border-b
+         bg-[#0C1A14] border-transparent"
+>
+  <a href="/" aria-label="Cauce — inicio" id="nav-wordmark" class="flex items-center gap-2">
+    <svg width="110" height="193" viewBox="0 0 110 193" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-6 w-auto" style="overflow: visible">
+      <path id="logo-outer" d="M92.8125 96.25L23.2031 179.605L23.2031 12.8951L92.8125 96.25Z" fill="#F8F7F4"/>
+      <path id="logo-inner" d="M110 96L61.25 140.167L61.25 51.8327L110 96Z" fill="#1D9E75"/>
+    </svg>
+    <span id="nav-text" class="transition-colors duration-300" style="font-family: 'Plus Jakarta Sans Variable', system-ui, sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.03em; color: #F8F7F4">cauce</span>
+  </a>
+
+  <!-- Links desktop -->
   <div class="hidden lg:flex lg:gap-8">
-    <a
-      href="#como-trabajamos"
-      class="type-small text-stone hover:text-ink transition-colors"
-    >
+    <a href="#como-trabajamos" class="type-small transition-colors nav-link" style="color: #7A8C82">
       Cómo trabajamos
     </a>
-    <a
-      href="#servicios"
-      class="type-small text-stone hover:text-ink transition-colors"
-    >
+    <a href="#servicios" class="type-small transition-colors nav-link" style="color: #7A8C82">
       Servicios
     </a>
-    <a
-      href="#el-equipo"
-      class="type-small text-stone hover:text-ink transition-colors"
-    >
+    <a href="#el-equipo" class="type-small transition-colors nav-link" style="color: #7A8C82">
       El equipo
     </a>
   </div>
 
-  <!-- RIGHT: mobile link + desktop Button -->
-  <a
-    href="#auditoria"
-    class="type-label text-accent lg:hidden"
-  >
-    Auditoría gratis →
-  </a>
-  <div class="hidden lg:block">
-    <Button variant="primary" href="#auditoria" class="w-auto h-10 px-5 text-sm">
+  <!-- CTA nav -->
+  <div class="flex items-center gap-3">
+    <!-- Mobile -->
+    <a href="#auditoria" class="type-label transition-colors lg:hidden" style="color: #1D9E75">
       Auditoría gratis →
-    </Button>
+    </a>
+    <!-- Desktop -->
+    <a
+      href="#auditoria"
+      class="hidden lg:inline-flex items-center justify-center
+             type-cta bg-[#1D9E75] text-white rounded-lg px-5 h-10
+             hover:bg-[#178A65] active:scale-[0.98] transition-all duration-150"
+    >
+      Auditoría gratis →
+    </a>
   </div>
 </nav>
+
+<script>
+  const nav = document.getElementById('main-nav');
+  const navText = document.getElementById('nav-text');
+  const logoOuter = document.getElementById('logo-outer');
+  const links = document.querySelectorAll('.nav-link');
+
+  const heroEl = document.getElementById('hero');
+  const heroHeight = heroEl?.offsetHeight || 600;
+
+  function updateNav() {
+    const scrolled = window.scrollY > heroHeight - 56;
+
+    if (scrolled) {
+      // Sobre sección clara — fondo crema opaco
+      nav?.classList.remove('bg-[#0C1A14]', 'border-transparent');
+      nav?.classList.add('bg-[#F8F7F4]', 'border-[#E0DDD6]');
+      if (logoOuter) logoOuter.setAttribute('fill', '#0A0A0A');
+      if (navText) navText.style.color = '#0A0A0A';
+      links.forEach(l => {
+        (l as HTMLElement).style.color = '#4A4A4A';
+      });
+    } else {
+      // Sobre hero oscuro — fondo oscuro igual al hero
+      nav?.classList.remove('bg-[#F8F7F4]', 'border-[#E0DDD6]');
+      nav?.classList.add('bg-[#0C1A14]', 'border-transparent');
+      if (logoOuter) logoOuter.setAttribute('fill', '#F8F7F4');
+      if (navText) navText.style.color = '#F8F7F4';
+      links.forEach(l => {
+        (l as HTMLElement).style.color = '#7A8C82';
+      });
+    }
+  }
+
+  updateNav();
+  window.addEventListener('scroll', updateNav, { passive: true });
+</script>

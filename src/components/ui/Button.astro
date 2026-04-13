@@ -15,9 +15,13 @@ const { variant = 'primary', type = 'button', href, class: className = '', id } 
     href={href}
     id={id}
     class:list={[
-      'type-cta inline-flex items-center justify-center rounded-none transition-colors',
-      variant === 'primary' && 'bg-accent text-paper px-8 h-14 w-full hover:bg-accent-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-      variant === 'text' && 'text-stone underline-offset-2 hover:text-ink',
+      'type-cta inline-flex items-center justify-center transition-all duration-150',
+      variant === 'primary' && [
+        'bg-[#1D9E75] text-white rounded-lg px-8 h-14 w-full',
+        'hover:bg-[#178A65] active:scale-[0.98]',
+        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9E75]'
+      ],
+      variant === 'text' && 'text-[#7A7870] hover:text-[#1A1A18]',
       className
     ]}
   >
@@ -28,9 +32,14 @@ const { variant = 'primary', type = 'button', href, class: className = '', id } 
     type={type}
     id={id}
     class:list={[
-      'type-cta inline-flex items-center justify-center rounded-none transition-colors',
-      variant === 'primary' && 'bg-accent text-paper px-8 h-14 w-full hover:bg-accent-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:bg-disabled disabled:cursor-not-allowed',
-      variant === 'text' && 'text-stone hover:text-ink',
+      'type-cta inline-flex items-center justify-center transition-all duration-150',
+      variant === 'primary' && [
+        'bg-[#1D9E75] text-white rounded-lg px-8 h-14 w-full',
+        'hover:bg-[#178A65] active:scale-[0.98]',
+        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9E75]',
+        'disabled:bg-[#C4C4C4] disabled:cursor-not-allowed disabled:scale-100'
+      ],
+      variant === 'text' && 'text-[#7A7870] hover:text-[#1A1A18]',
       className
     ]}
   >

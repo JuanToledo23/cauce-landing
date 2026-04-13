@@ -4,20 +4,20 @@ import { tickerItems } from '../data/ticker';
 const casosPublicados = casos.filter(c => c.publicado);
 ---
 
-<section id="el-equipo" class="pt-16 pb-16 px-5 lg:px-16" data-section="prueba-social">
+<section id="el-equipo" class="pt-16 pb-16 px-5 lg:px-16" data-section="prueba-social" style="background-color: #F0EDE7">
   <div class="max-w-screen-xl mx-auto">
 
-    <p class="type-label text-stone mb-8">EL EQUIPO</p>
+    <p class="type-label mb-8" style="color: #4A4A4A">EL EQUIPO</p>
 
     <div class="lg:grid lg:grid-cols-12 lg:gap-8">
 
       <!-- Col izquierda (col-span-5) -->
       <div class="lg:col-span-5">
-        <h2 class="type-h2 text-ink max-w-[340px] lg:max-w-none">
-          9 años construyendo productos digitales y marcas en México.
+        <h2 class="type-h2 max-w-[340px] lg:max-w-none" style="color: #0A0A0A">
+          13 años construyendo productos digitales y marcas en México.
         </h2>
 
-        <p class="type-caption text-stone mt-6">CDMX · México · Desde 2016</p>
+        <p class="type-caption mt-6" style="color: #4A4A4A">CDMX · México · Desde 2012</p>
       </div>
 
       <!-- Col derecha (col-span-7) -->
@@ -25,17 +25,17 @@ const casosPublicados = casos.filter(c => c.publicado);
 
         <!-- Bootstrap: credencial de trayectoria -->
         {casosPublicados.length === 0 && (
-          <blockquote class="type-body text-ink">
-            <p>"Construimos Wapi, una plataforma de agentes de IA para WhatsApp Business, actualmente con pilotos activos con negocios en México."</p>
-            <footer class="type-small text-stone mt-3">— Equipo Cauce</footer>
+          <blockquote class="type-body" style="color: #0A0A0A">
+            <p>"Dupla multidisciplinaria con experiencia en UX Research, desarrollo full-stack y diseño de marca. Construimos lo que tu negocio realmente necesita — sin intermediarios, con resultados medibles."</p>
+            <footer class="type-small mt-3" style="color: #4A4A4A">— Juan Toledo & Karina Valdés, Cauce</footer>
           </blockquote>
         )}
 
         <!-- Estado futuro: casos reales -->
         {casosPublicados.map(caso => caso.testimonio && (
-          <blockquote class="type-body text-ink mb-6">
+          <blockquote class="type-body mb-6" style="color: #0A0A0A">
             <p>"{caso.testimonio.texto}"</p>
-            <footer class="type-small text-stone mt-3">
+            <footer class="type-small mt-3" style="color: #4A4A4A">
               — {caso.testimonio.nombre}, {caso.testimonio.cargo}, {caso.testimonio.empresa}
             </footer>
           </blockquote>
@@ -48,7 +48,7 @@ const casosPublicados = casos.filter(c => c.publicado);
     <div class="mt-12 overflow-hidden" aria-hidden="true">
       <div class="ticker-track">
         {[...tickerItems, ...tickerItems].map(item => (
-          <span class="type-label text-stone whitespace-nowrap mr-8">{item} ·</span>
+          <span class="type-label whitespace-nowrap mr-8" style="color: #4A4A4A">{item} ·</span>
         ))}
       </div>
     </div>

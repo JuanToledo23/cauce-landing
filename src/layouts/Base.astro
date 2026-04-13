@@ -3,8 +3,7 @@ import '../styles/global.css';
 // Importar fuentes via Fontsource — Astro las procesa a través de Vite
 // y genera las URLs correctas con hash de contenido en producción.
 // NO hardcodear paths de /node_modules — usar import estático.
-import '@fontsource-variable/fraunces/wght-italic.css';
-import '@fontsource-variable/instrument-sans/wght.css';
+import '@fontsource-variable/plus-jakarta-sans/wght.css';
 
 interface Props {
   title?: string;
@@ -28,7 +27,7 @@ const ogImageUrl = new URL(ogImage, Astro.site);
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#F6F3EE" />
+  <meta name="theme-color" content="#F8F7F4" />
 
   <!-- SEO -->
   <title>{title}</title>

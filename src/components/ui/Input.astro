@@ -14,7 +14,7 @@ const inputId = id || `field-${name}`;
 ---
 
 <div class="flex flex-col gap-1">
-  <label for={inputId} class="type-label text-stone">{label}</label>
+  <label for={inputId} class="type-label text-[#7A7870]">{label}</label>
   <input
     id={inputId}
     name={name}
@@ -22,13 +22,13 @@ const inputId = id || `field-${name}`;
     placeholder={placeholder}
     required={required}
     autocomplete={type === 'email' ? 'email' : name === 'nombre' ? 'name' : 'organization'}
-    class="h-14 bg-paper border border-stone rounded-none px-4 type-body text-ink
-           placeholder:text-stone
-           focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink
-           aria-[invalid=true]:border-error"
+    class="h-14 bg-white border border-[#E0DDD6] rounded-lg px-4 type-body text-[#1A1A18]
+           placeholder:text-[#A1A19A]
+           focus:outline-none focus:border-[#1D9E75] focus:ring-1 focus:ring-[#1D9E75]
+           aria-[invalid=true]:border-[#C0392B]"
     aria-describedby={errorMessage ? `${inputId}-error` : undefined}
   />
   {errorMessage && (
-    <p id={`${inputId}-error`} class="type-caption text-error" role="alert">{errorMessage}</p>
+    <p id={`${inputId}-error`} class="type-caption text-[#C0392B]" role="alert">{errorMessage}</p>
   )}
 </div>

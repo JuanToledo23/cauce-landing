@@ -1,103 +1,97 @@
 ---
-import Button from './ui/Button.astro';
-import { heroVariants } from '../data/ab-variants';
-
 interface Props {
   abVariant: 'A' | 'B' | 'C';
 }
 
 const { abVariant } = Astro.props;
+import { heroVariants } from '../data/ab-variants';
 const defaultVariant = heroVariants[abVariant] || heroVariants['A'];
 ---
 
-<section id="hero" class="pt-16 pb-16 px-5 lg:px-16">
-  <!-- Mobile: columna única. Desktop: 7/12 + 5/12 -->
-  <div class="max-w-screen-xl mx-auto lg:grid lg:grid-cols-12 lg:gap-8 lg:items-start">
+<section id="hero" class="hero-bg pt-20 pb-20 px-5 lg:px-16">
+  <div class="max-w-2xl mx-auto">
 
-    <!-- Columna de texto (col-span-7 desktop) -->
-    <div class="lg:col-span-7">
-
-      <!-- Statement principal — A/B swappable -->
-      <h1
-        id="hero-statement"
-        class="type-display text-ink max-w-[340px] lg:max-w-none"
-        data-variant={abVariant}
-      >
-        {defaultVariant.statement.map(line => <span class="block">{line}</span>)}
-      </h1>
-
-      <p
-        id="hero-sub"
-        class="type-body-lg text-stone mt-6 max-w-[340px] lg:max-w-[520px]"
-      >
-        {defaultVariant.subStatement}
-      </p>
-
-      <!-- CTAs -->
-      <div class="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center">
-        <Button
-          variant="primary"
-          href="#auditoria"
-          id="hero-cta"
-          class="lg:w-auto lg:px-8"
-        >
-          Quiero mi auditoría →
-        </Button>
-        <a
-          href="/whatsapp?from=hero"
-          id="hero-whatsapp"
-          class="type-small text-stone text-center hover:text-ink transition-colors lg:text-left"
-          target="_blank"
-          rel="noopener"
-        >
-          o escríbenos por WhatsApp →
-        </a>
-      </div>
-
-      <!-- Señal de tracks -->
-      <div class="mt-8 type-label text-stone flex flex-wrap gap-x-4 gap-y-1">
-        <span>▸ Producto digital</span>
-        <span>▸ Marca y presencia digital</span>
-        <span>9+ años · CDMX · Dos tracks</span>
-      </div>
-
+    <!-- Badge de contexto -->
+    <div class="badge mb-8 w-fit">
+      <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#1D9E75]"></span>
+      Research · Diseño · Desarrollo
     </div>
 
-    <!-- Columna imagen — desktop únicamente -->
-    <div
-      class="hidden lg:block lg:col-span-5 aspect-[4/3] bg-mist"
-      aria-hidden="true"
+    <!-- Statement principal A/B -->
+    <h1
+      id="hero-statement"
+      class="type-display"
+      style="color: #F8F7F4"
+      data-variant={abVariant}
     >
-      <!-- placeholder hasta ASSET-I01 (primer caso de estudio) -->
+      {defaultVariant.statement.map(line => <span class="block">{line}</span>)}
+    </h1>
+
+    <p
+      id="hero-sub"
+      class="type-body-lg mt-6 max-w-[460px]"
+      style="color: #7A8C82"
+    >
+      {defaultVariant.subStatement}
+    </p>
+
+    <!-- CTAs -->
+    <div class="mt-10 flex flex-col gap-4 lg:flex-row lg:items-center">
+      <a
+        href="#auditoria"
+        id="hero-cta"
+        class="type-cta inline-flex items-center justify-center
+               bg-[#1D9E75] text-white rounded-lg px-8 h-14
+               hover:bg-[#178A65] active:scale-[0.98] transition-all duration-150
+               lg:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9E75]"
+      >
+        Quiero mi auditoría →
+      </a>
+      <a
+        href="/whatsapp?from=hero"
+        id="hero-whatsapp"
+        class="type-small text-center transition-colors lg:text-left"
+        style="color: #7A8C82"
+        target="_blank"
+        rel="noopener"
+      >
+        o escríbenos por WhatsApp →
+      </a>
+    </div>
+
+    <!-- Separador sutil -->
+    <div class="mt-10 border-t" style="border-color: #1E3D2E"></div>
+
+    <!-- Prueba social: proyectos reales -->
+    <div class="mt-6">
+      <p class="type-small" style="color: #4A5C52">
+        Han confiado en el equipo:
+        <span style="color: #3A6B52">MAJA Sportswear · BrightPath · Klu · New Era Latam</span>
+      </p>
     </div>
 
   </div>
 </section>
 
-<!-- Script de A/B swap — se ejecuta al recibir ab:ready -->
 <script>
   import { heroVariants } from '../data/ab-variants';
   import { trackEvent } from '../utils/analytics';
 
   document.addEventListener('ab:ready', ((e: Event) => {
-    const detail = (e as CustomEvent).detail as { variant: 'A' | 'B' | 'C' };
-    const variant = detail.variant;
+    const variant = (e as CustomEvent).detail.variant as 'A' | 'B' | 'C';
     const data = heroVariants[variant];
     if (!data) return;
 
-    // Swap statement
     const el = document.getElementById('hero-statement');
     if (el) {
       el.innerHTML = data.statement.map(l => `<span class="block">${l}</span>`).join('');
       el.dataset.variant = variant;
     }
 
-    // Swap sub-statement
     const sub = document.getElementById('hero-sub');
     if (sub) sub.textContent = data.subStatement;
   }) as EventListener);
 
-  // Tracking CTA click con variante actual
   document.getElementById('hero-cta')?.addEventListener('click', () => {
     const variant = document.getElementById('hero-statement')?.dataset.variant || 'A';
     trackEvent('hero_cta_click', { ab_variant: variant, cta_location: 'hero' });

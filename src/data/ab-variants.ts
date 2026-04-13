@@ -6,7 +6,7 @@ export const heroVariants: Record<ABVariant, {
 }> = {
   A: {
     statement: ['Investigamos el problema real.', 'Construimos lo que funciona.'],
-    subStatement: 'Estrategia, diseño y desarrollo. Un solo equipo senior. Sin pasar el proyecto de agencia en agencia.',
+    subStatement: 'Donde la tecnología se encuentra con el pensamiento estratégico humano.',
   },
   B: {
     // H04 (Var B): ajustada para incluir Track B — sin mencionar "agencia"

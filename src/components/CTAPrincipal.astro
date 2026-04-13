@@ -5,14 +5,15 @@ import Input from './ui/Input.astro';
 
 <section
   id="auditoria"
-  class="bg-mist pt-16 pb-16 px-5 lg:px-16"
+  class="pt-16 pb-16 px-5 lg:px-16"
   data-section="cta"
+  style="background-color: #F0EDE7"
 >
   <div class="max-w-screen-xl mx-auto">
     <div class="max-w-[520px] mx-auto">
 
-      <h2 class="type-h1 text-ink">Auditoría Express Gratuita</h2>
-      <p class="type-body text-stone mt-4">
+      <h2 class="type-h1" style="color: #0A0A0A">Auditoría Express Gratuita</h2>
+      <p class="type-body mt-4" style="color: #4A4A4A">
         48 horas. Sin compromiso.<br>
         Te decimos qué está roto y qué vale la pena arreglar.
       </p>
@@ -36,13 +37,13 @@ import Input from './ui/Input.astro';
 
       <!-- Estado success (hidden por defecto) -->
       <div id="form-success" class="hidden mt-8" role="status" aria-live="polite">
-        <p class="type-h3 text-ink">Recibimos tu solicitud.</p>
-        <p class="type-body text-stone mt-2">Te escribimos en las próximas 24 horas.</p>
+        <p class="type-h3" style="color: #0A0A0A">Recibimos tu solicitud.</p>
+        <p class="type-body mt-2" style="color: #4A4A4A">Te escribimos en las próximas 24 horas.</p>
       </div>
 
       <!-- Estado error (hidden por defecto) -->
       <div id="form-error" class="hidden mt-4" role="alert">
-        <p class="type-caption text-error">
+        <p class="type-caption" style="color: #C0392B">
           Algo falló al enviar. Escríbenos directamente a
           <a href="mailto:hola@cauce.mx" class="underline">hola@cauce.mx</a>
         </p>
@@ -53,7 +54,8 @@ import Input from './ui/Input.astro';
         <a
           href="/whatsapp?from=cta"
           id="cta-whatsapp"
-          class="type-small text-stone hover:text-ink transition-colors"
+          class="type-small transition-colors"
+          style="color: #4A4A4A"
           target="_blank"
           rel="noopener"
         >
@@ -61,10 +63,10 @@ import Input from './ui/Input.astro';
         </a>
       </p>
 
-      <!-- Aviso de privacidad — H05 resuelto -->
-      <p class="type-caption text-stone mt-4 text-center">
+      <!-- Aviso de privacidad -->
+      <p class="type-caption mt-4 text-center" style="color: #4A4A4A">
         Al enviar aceptas nuestro
-        <a href="/privacidad" class="underline hover:text-ink">Aviso de privacidad</a>.
+        <a href="/privacidad" class="underline">Aviso de privacidad</a>.
         Respondemos en menos de 24 horas.
       </p>
 

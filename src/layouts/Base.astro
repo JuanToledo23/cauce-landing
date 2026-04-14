@@ -13,14 +13,14 @@ interface Props {
 }
 
 const {
-  title = 'Cauce — Consultora de Producto Digital y Marca',
-  description = 'Investigamos el problema real. Construimos lo que funciona. Estrategia, diseño y desarrollo para PYMES mexicanas.',
-  ogImage = '/og-image.png',
+  title = 'Cauce — Diseño web y desarrollo de productos digitales en CDMX | México',
+  description = 'Consultora boutique en CDMX especializada en diseño web profesional, desarrollo de MVPs y branding para PYMES mexicanas. Research primero, resultados medibles. Diagnóstico gratuito en 48 horas.',
+  ogImage = '/og-image.svg',
   abVariant = 'A',
 } = Astro.props;
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const ogImageUrl = new URL(ogImage, Astro.site);
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageUrl = new URL(ogImage, Astro.site).toString();
 ---
 
 <html lang="es-MX">
@@ -48,6 +48,27 @@ const ogImageUrl = new URL(ogImage, Astro.site);
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImageUrl} />
+
+  <!-- Schema.org — datos estructurados para búsquedas locales -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Cauce",
+    "description": description,
+    "url": "https://www.cauce.tech",
+    "logo": "https://www.cauce.tech/logo/cauce.svg",
+    "foundingDate": "2016",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Ciudad de México",
+      "addressRegion": "CDMX",
+      "addressCountry": "MX"
+    },
+    "areaServed": "México",
+    "serviceType": ["Diseño web", "Desarrollo de software", "Branding", "MVP", "UX Research", "Consultoría digital"],
+    "knowsLanguage": ["es", "en"],
+    "priceRange": "$$"
+  })} />
 
   <!-- Favicons -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

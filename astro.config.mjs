@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://cauce.mx',
+  site: 'https://www.cauce.tech',
   output: 'static',
   adapter: vercel({
     webAnalytics: { enabled: false },

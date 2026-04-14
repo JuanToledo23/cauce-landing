@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
-Sitemap: https://cauce.mx/sitemap-index.xml
+Disallow: /api/
+
+Sitemap: https://www.cauce.tech/sitemap-index.xml

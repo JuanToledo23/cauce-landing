@@ -26,6 +26,9 @@ const ogImageUrl = new URL(ogImage, Astro.site).toString();
 <html lang="es-MX">
 <head>
   <meta charset="utf-8" />
+  <link rel="preconnect" href="https://app.posthog.com" />
+  <link rel="preconnect" href="https://us-assets.i.posthog.com" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#F8F7F4" />
 
@@ -134,38 +137,39 @@ const ogImageUrl = new URL(ogImage, Astro.site).toString();
     if (phKey) {
       posthog.init(phKey, {
         api_host: 'https://app.posthog.com',
-        capture_pageview: false, // pageview manual para incluir ab_variant
+        capture_pageview: false,
         persistence: 'cookie',
+        // Deshabilitar módulos pesados que no necesitamos
+        disable_session_recording: true,
+        enable_recording_console_log: false,
+        autocapture: false,
+        capture_performance: false,
+        disable_surveys: true,
+        advanced_disable_decide: false, // mantener para feature flags del A/B
+        loaded: function(ph) {
+          // Solo cargar feature flags, nada más
+          ph.onFeatureFlags(function() {
+            var variant = document.cookie.match(/cauce_ab=([ABC])/)?.[1];
+            if (!variant) {
+              variant = ph.getFeatureFlag('hero-ab-test') || 'A';
+              document.cookie = 'cauce_ab=' + variant + ';max-age=2592000;path=/;samesite=lax';
+              document.dispatchEvent(new CustomEvent('ab:ready', { detail: { variant: variant } }));
+            } else {
+              document.dispatchEvent(new CustomEvent('ab:ready', { detail: { variant: variant } }));
+            }
+          });
+        }
       });
     }
 
-    // Leer o asignar variante A/B
-    // Cookie de primera parte previene FOVC en visitas subsiguientes
-    let variant = document.cookie.match(/cauce_ab=([ABC])/)?.[1];
-    if (!variant) {
-      if (phKey && typeof posthog.onFeatureFlags === 'function') {
-        posthog.onFeatureFlags(function () {
-          variant = posthog.getFeatureFlag('hero-ab-test') || abVariant || 'A';
-          document.cookie = `cauce_ab=${variant};max-age=2592000;path=/;samesite=lax`;
-          document.dispatchEvent(
-            new CustomEvent('ab:ready', { detail: { variant } })
-          );
-        });
-      } else {
-        variant = abVariant || 'A';
-        document.cookie = `cauce_ab=${variant};max-age=2592000;path=/;samesite=lax`;
-        document.dispatchEvent(
-          new CustomEvent('ab:ready', { detail: { variant } })
-        );
-      }
-    } else {
-      // Variante ya conocida — aplicar sin esperar a Posthog
-      document.dispatchEvent(
-        new CustomEvent('ab:ready', { detail: { variant } })
-      );
+    // Si no hay Posthog, aplicar variante desde cookie o default
+    if (!phKey) {
+      var variant = document.cookie.match(/cauce_ab=([ABC])/)?.[1] || abVariant || 'A';
+      document.cookie = 'cauce_ab=' + variant + ';max-age=2592000;path=/;samesite=lax';
+      document.dispatchEvent(new CustomEvent('ab:ready', { detail: { variant: variant } }));
     }
 
-    // GA4
+    // GA4 — carga lazy: 3s después de load para no bloquear render
     window.dataLayer = window.dataLayer || [];
     function gtag() {
       dataLayer.push(arguments);
@@ -173,28 +177,28 @@ const ogImageUrl = new URL(ogImage, Astro.site).toString();
     gtag('js', new Date());
     if (ga4Id) {
       gtag('config', ga4Id, { send_page_view: false });
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4Id;
+          document.head.appendChild(s);
+        }, 3000);
+      });
     }
 
     // page_view manual con ab_variant
-    const params = new URLSearchParams(window.location.search);
-    const utmSource = params.get('utm_source') || '';
-    const utmMedium = params.get('utm_medium') || '';
-    const utmCampaign = params.get('utm_campaign') || '';
-    const pvProps = {
-      ab_variant: variant || abVariant || 'A',
-      utm_source: utmSource,
-      utm_medium: utmMedium,
-      utm_campaign: utmCampaign,
+    var abVar = document.cookie.match(/cauce_ab=([ABC])/)?.[1] || abVariant || 'A';
+    var params = new URLSearchParams(window.location.search);
+    var pvProps = {
+      ab_variant: abVar,
+      utm_source: params.get('utm_source') || '',
+      utm_medium: params.get('utm_medium') || '',
+      utm_campaign: params.get('utm_campaign') || '',
     };
     if (phKey) posthog.capture('page_view', pvProps);
     if (ga4Id) gtag('event', 'page_view', pvProps);
   </script>
-  {import.meta.env.PUBLIC_GA4_MEASUREMENT_ID && (
-    <script
-      async
-      src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA4_MEASUREMENT_ID}`}
-    ></script>
-  )}
 </head>
 <body class="bg-paper text-ink font-body antialiased">
   <slot />

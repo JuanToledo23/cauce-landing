@@ -145,6 +145,8 @@ const ogImageUrl = new URL(ogImage, Astro.site).toString();
         autocapture: false,
         capture_performance: false,
         disable_surveys: true,
+        __advanced_disable_dead_click_autocapture: true,
+        advanced_disable_feature_flags: false,
         advanced_disable_decide: false, // mantener para feature flags del A/B
         loaded: function(ph) {
           // Solo cargar feature flags, nada más

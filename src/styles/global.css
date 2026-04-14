@@ -19,7 +19,7 @@
   --color-dark-surface: #132A20;
   --color-dark-border:  #1E3D2E;
   --color-dark-text:    #F8F7F4;
-  --color-dark-muted:   #7A8C82;
+  --color-dark-muted:   #A8C5B5;
 
   /* Body (light crema) */
   --color-light-bg:     #F8F7F4;
@@ -78,7 +78,7 @@ h1, h2, h3, p, span, li {
   size-adjust: 102%;
   ascent-override: 98%;
   descent-override: 22%;
-  font-display: swap;
+  font-display: optional;
 }
 
 /* ============================================================

@@ -69,6 +69,20 @@ h1, h2, h3, p, span, li {
 }
 
 /* ============================================================
+   FONT PRELOAD — copia estable en /fonts/ para preload en <head>
+   ============================================================ */
+@font-face {
+  font-family: 'Plus Jakarta Sans Variable';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/plus-jakarta-sans.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC,
+    U+02C6, U+02DA, U+02DC, U+2020, U+2022, U+2026, U+2030,
+    U+2039-203A, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
+}
+
+/* ============================================================
    FONT FALLBACK — Plus Jakarta Sans → system-ui
    Calibrar con fontpie si CLS > 0.05 post-deploy.
    ============================================================ */

@@ -26,9 +26,16 @@ const ogImageUrl = new URL(ogImage, Astro.site).toString();
 <html lang="es-MX">
 <head>
   <meta charset="utf-8" />
-  <link rel="preconnect" href="https://app.posthog.com" />
+  <link rel="preconnect" href="https://us.i.posthog.com" />
   <link rel="preconnect" href="https://us-assets.i.posthog.com" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link
+    rel="preload"
+    as="font"
+    type="font/woff2"
+    crossorigin="anonymous"
+    href="/fonts/plus-jakarta-sans.woff2"
+  />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#F8F7F4" />
 
@@ -136,31 +143,30 @@ const ogImageUrl = new URL(ogImage, Astro.site).toString();
 
     if (phKey) {
       posthog.init(phKey, {
-        api_host: 'https://app.posthog.com',
+        api_host: 'https://us.i.posthog.com',
+        ui_host: 'https://us.posthog.com',
         capture_pageview: false,
+        capture_pageleave: false,
         persistence: 'cookie',
-        // Deshabilitar módulos pesados que no necesitamos
+        autocapture: false,
         disable_session_recording: true,
         enable_recording_console_log: false,
-        autocapture: false,
-        capture_performance: false,
         disable_surveys: true,
-        __advanced_disable_dead_click_autocapture: true,
-        advanced_disable_feature_flags: false,
-        advanced_disable_decide: false, // mantener para feature flags del A/B
-        loaded: function(ph) {
-          // Solo cargar feature flags, nada más
-          ph.onFeatureFlags(function() {
-            var variant = document.cookie.match(/cauce_ab=([ABC])/)?.[1];
-            if (!variant) {
-              variant = ph.getFeatureFlag('hero-ab-test') || 'A';
-              document.cookie = 'cauce_ab=' + variant + ';max-age=2592000;path=/;samesite=lax';
-              document.dispatchEvent(new CustomEvent('ab:ready', { detail: { variant: variant } }));
-            } else {
-              document.dispatchEvent(new CustomEvent('ab:ready', { detail: { variant: variant } }));
-            }
-          });
+        capture_performance: false,
+        feature_flag_request_timeout_ms: 3000,
+        bootstrap: {
+          featureFlags: {}
         }
+      });
+
+      // Feature flags para A/B test
+      posthog.onFeatureFlags(function() {
+        var variant = document.cookie.match(/cauce_ab=([ABC])/)?.[1];
+        if (!variant) {
+          variant = posthog.getFeatureFlag('hero-ab-test') || 'A';
+          document.cookie = 'cauce_ab=' + variant + ';max-age=2592000;path=/;samesite=lax';
+        }
+        document.dispatchEvent(new CustomEvent('ab:ready', { detail: { variant: variant } }));
       });
     }
 

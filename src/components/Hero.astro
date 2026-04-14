@@ -25,7 +25,12 @@ const defaultVariant = heroVariants[abVariant] || heroVariants['A'];
     </svg>
   </div>
 
-  <div class="max-w-2xl mx-auto relative" style="z-index: 1">
+  <div class="max-w-4xl mx-auto relative" style="z-index: 1">
+
+    <!-- Label -->
+    <p class="type-label hero-animate" style="color: #7A8C82; animation-delay: 0ms">
+      CONSULTORA DE PRODUCTO DIGITAL Y MARCA · CDMX
+    </p>
 
     <!-- Statement principal A/B -->
     <h1
@@ -51,21 +56,22 @@ const defaultVariant = heroVariants[abVariant] || heroVariants['A'];
         href="#auditoria"
         id="hero-cta"
         class="type-cta inline-flex items-center justify-center
-               bg-[#1D9E75] text-white rounded-lg px-8 h-14
+               bg-[#1D9E75] text-white rounded-none px-8 h-14
                hover:bg-[#178A65] active:scale-[0.98] transition-all duration-150
                lg:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9E75]"
       >
-        Quiero mi diagnóstico →
+        Quiero mi diagnóstico gratuito
       </a>
       <a
-        href="/api/whatsapp?from=hero"
+        href="#etapas"
         id="hero-whatsapp"
-        class="type-small text-center transition-colors lg:text-left"
-        style="color: #7A8C82"
-        target="_blank"
-        rel="noopener"
+        class="type-cta inline-flex items-center justify-center
+               border text-white rounded-none px-8 h-14
+               hover:bg-white/10 active:scale-[0.98] transition-all duration-150
+               lg:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9E75]"
+        style="border-color: #F8F7F4"
       >
-        o escríbenos por WhatsApp →
+        ¿Qué proyecto necesito?
       </a>
     </div>
 
@@ -74,8 +80,8 @@ const defaultVariant = heroVariants[abVariant] || heroVariants['A'];
       <div class="mt-10 border-t" style="border-color: #1E3D2E"></div>
       <div class="mt-6">
         <p class="type-small" style="color: #4A5C52">
-          Han confiado en el equipo:
-          <span style="color: #3A6B52">MAJA Sportswear · BrightPath · Klu · New Era Latam</span>
+          <!-- Han confiado en el equipo: <span style="color: #3A6B52">MAJA Sportswear · BrightPath · Klu · New Era Latam</span> -->
+          Research primero · Especificación · Construcción acelerada
         </p>
       </div>
     </div>

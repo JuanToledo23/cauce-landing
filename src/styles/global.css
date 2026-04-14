@@ -139,7 +139,7 @@ h1, h2, h3, p, span, li {
 
 /* Desktop overrides ≥ 1024px */
 @media (min-width: 1024px) {
-  .type-display { font-size: 72px; }
+  .type-display { font-size: 60px; }
   .type-h1      { font-size: 52px; }
   .type-h2      { font-size: 40px; }
   .type-h3      { font-size: 24px; }

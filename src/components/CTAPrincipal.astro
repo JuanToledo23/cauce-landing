@@ -12,10 +12,9 @@ import Input from './ui/Input.astro';
   <div class="max-w-screen-xl mx-auto">
     <div class="max-w-[520px] mx-auto reveal-stagger">
 
-      <h2 class="type-h1 reveal-element" style="color: #0A0A0A">Diagnóstico Express Gratuito</h2>
+      <h2 class="type-h1 reveal-element" style="color: #0A0A0A">Diagnóstico express gratuito</h2>
       <p class="type-body mt-4 reveal-element" style="color: #4A4A4A">
-        Sin compromiso.<br>
-        Te decimos qué está roto y qué vale la pena arreglar.
+        Sin compromiso. Cuéntanos tu proyecto — chico o grande — y en 24 horas te decimos qué tiene sentido construir y cuál sería el primer paso.
       </p>
 
       <!-- Formulario — state: idle (inicial) -->
@@ -25,15 +24,20 @@ import Input from './ui/Input.astro';
         novalidate
         aria-label="Formulario de diagnóstico express"
       >
-        <Input name="nombre" label="Nombre completo" placeholder="Tu nombre" required />
-        <Input name="empresa" label="Empresa o proyecto" placeholder="Nombre de tu empresa" required />
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <Input name="nombre" label="Nombre completo" placeholder="Tu nombre" required />
+          <Input name="empresa" label="Empresa o proyecto" placeholder="Nombre de tu empresa" required />
+        </div>
         <Input name="correo" type="email" label="Correo electrónico" placeholder="tu@empresa.com" required />
-        <Input name="telefono" type="tel" label="Teléfono" placeholder="55 1234 5678" required />
+        <Input name="telefono" type="tel" label="Teléfono celular" placeholder="55 1234 5678" required />
 
-        <Button type="submit" id="form-submit" class="cta-pulse">
-          <span id="btn-text">Quiero mi diagnóstico →</span>
-          <span id="btn-loading" class="hidden">Enviando...</span>
-        </Button>
+        <div class="flex flex-col gap-3 lg:flex-row lg:items-center">
+          <Button type="submit" id="form-submit" class="cta-pulse lg:w-auto">
+            <span id="btn-text">Quiero mi diagnóstico →</span>
+            <span id="btn-loading" class="hidden">Enviando...</span>
+          </Button>
+          <p class="type-caption" style="color: #4A4A4A">Respondemos en menos de 24 horas.</p>
+        </div>
       </form>
 
       <!-- Estado success (hidden por defecto) -->
@@ -57,24 +61,18 @@ import Input from './ui/Input.astro';
       </div>
 
       <!-- Alt WhatsApp -->
-      <p class="mt-6 text-center">
+      <p class="mt-6">
+        <span class="type-small" style="color: #4A4A4A">¿Prefieres WhatsApp? </span>
         <a
           href="/api/whatsapp?from=cta"
           id="cta-whatsapp"
-          class="type-small transition-colors"
-          style="color: #4A4A4A"
+          class="type-small transition-colors underline"
+          style="color: #0A0A0A; font-weight: 600"
           target="_blank"
           rel="noopener"
         >
-          Prefiero WhatsApp →
+          Escríbenos directo →
         </a>
-      </p>
-
-      <!-- Aviso de privacidad -->
-      <p class="type-caption mt-4 text-center" style="color: #4A4A4A">
-        Al enviar aceptas nuestro
-        <a href="/privacidad" class="underline">Aviso de privacidad</a>.
-        Respondemos en menos de 24 horas.
       </p>
 
     </div>

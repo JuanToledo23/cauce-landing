@@ -1,0 +1,130 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const personSchemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Juan Toledo",
+    "jobTitle": "Co-fundador, Desarrollo Full-Stack",
+    "worksFor": {"@type": "Organization", "name": "Cauce"},
+    "url": "https://www.cauce.tech/sobre-nosotros"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Karina Valdés",
+    "jobTitle": "Co-fundadora, UX Research y Diseño Estratégico",
+    "worksFor": {"@type": "Organization", "name": "Cauce"},
+    "url": "https://www.cauce.tech/sobre-nosotros"
+  }
+];
+
+const pasos = [
+  { num: '01', title: 'Investigamos', body: 'Entrevistas, análisis competitivo y diagnóstico del problema real antes de proponer soluciones.' },
+  { num: '02', title: 'Especificamos', body: 'Documentamos qué se construye, cómo se evalúa y qué queda fuera — sin ambigüedades.' },
+  { num: '03', title: 'Construimos', body: 'Ejecución acelerada con un equipo senior completo. Cada avance es visible y testeable.' },
+];
+
+const proyectos = [
+  { name: 'MAJA Sportswear', desc: 'E-commerce y marca para línea de ropa deportiva mexicana.' },
+  { name: 'Klu', desc: 'Plataforma SaaS de gestión de conocimiento para equipos remotos.' },
+  { name: 'BrightPath', desc: 'App educativa con aprendizaje adaptativo para estudiantes.' },
+  { name: 'New Era Latam', desc: 'Estrategia digital y presencia web para la región latinoamericana.' },
+];
+---
+
+<Base
+  title="Sobre nosotros — Cauce | Consultora digital CDMX"
+  description="Conoce al equipo de Cauce: consultora boutique de producto digital y marca en Ciudad de México. Research-First, Spec-Driven, AI-Accelerated Build."
+>
+  <Nav />
+  <main class="max-w-[680px] mx-auto px-5 py-16 lg:py-24">
+
+    {personSchemas.map(schema => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
+
+    <h1 class="type-h1 text-ink mb-6">El equipo detrás de Cauce</h1>
+
+    <p class="type-body-lg text-ink mb-12">
+      Cauce nace en Ciudad de México con una premisa clara: investigar antes de construir.
+      Nuestra metodología Research-First, Spec-Driven y AI-Accelerated Build
+      nos permite entregar productos digitales y marcas con la profundidad de una consultora
+      y la velocidad de un equipo independiente.
+    </p>
+
+    <!-- Quiénes somos -->
+    <section class="mb-16">
+      <h2 class="type-h2 text-ink mb-8">Quiénes somos</h2>
+      <div class="space-y-8">
+        <div>
+          <h3 class="type-h3 text-ink mb-2">Juan Toledo</h3>
+          <p class="type-small text-stone mb-3">Co-fundador · Desarrollo Full-Stack · 9+ años</p>
+          <p class="type-body text-ink">
+            Ingeniero de software especializado en arquitectura de producto, desde MVPs hasta plataformas escalables.
+            Responsable de la capa técnica de cada proyecto en Cauce.
+          </p>
+        </div>
+        <div>
+          <h3 class="type-h3 text-ink mb-2">Karina Valdés</h3>
+          <p class="type-small text-stone mb-3">Co-fundadora · UX Research y Diseño Estratégico · 13+ años</p>
+          <p class="type-body text-ink">
+            Especialista en investigación de usuario y diseño de experiencia.
+            Lidera la fase de diagnóstico y asegura que cada decisión de diseño esté respaldada por datos reales.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Metodología -->
+    <section class="mb-16">
+      <h2 class="type-h2 text-ink mb-8">Nuestra metodología</h2>
+      <div class="space-y-6">
+        {pasos.map(paso => (
+          <div class="flex gap-4">
+            <span class="type-h2 text-accent flex-shrink-0" style="min-width: 48px">{paso.num}</span>
+            <div>
+              <h3 class="type-h3 text-ink mb-1">{paso.title}</h3>
+              <p class="type-body text-ink">{paso.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Proyectos -->
+    <section class="mb-16">
+      <h2 class="type-h2 text-ink mb-8">Proyectos del equipo</h2>
+      <div class="space-y-4">
+        {proyectos.map(p => (
+          <div class="py-3 border-b border-light-border">
+            <p class="type-h3 text-ink">{p.name}</p>
+            <p class="type-small text-stone mt-1">{p.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="pt-10 border-t border-light-border">
+      <p class="type-h3 text-ink mb-4">¿Listo para trabajar juntos?</p>
+      <a
+        href="/#auditoria"
+        class="type-cta inline-flex items-center justify-center
+               bg-accent text-white rounded-none px-8 h-14
+               hover:bg-accent-hover active:scale-[0.98] transition-all duration-150
+               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        Pide tu diagnóstico gratuito →
+      </a>
+    </div>
+
+    <a href="/" class="type-small text-stone underline hover:text-ink mt-12 inline-block">
+      ← Volver a cauce.tech
+    </a>
+  </main>
+  <Footer />
+</Base>

@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const faqs = [
+  {
+    q: '¿Qué hace Cauce?',
+    a: 'Cauce es una consultora boutique de producto digital y marca en Ciudad de México. Ayudamos a negocios a construir sitios web profesionales, desarrollar MVPs y crear identidades de marca — investigando el problema real antes de construir cualquier solución.'
+  },
+  {
+    q: '¿Cuánto cuesta hacer un sitio web profesional con Cauce?',
+    a: 'Nuestros proyectos de sitio web y marca parten desde $8,000 MXN para trabajos puntuales y Quick-Wins. Los proyectos de mayor alcance con estrategia, diseño e implementación completa tienen un rango de $20,000 a $60,000 MXN según el scope.'
+  },
+  {
+    q: '¿Cuánto tiempo tarda desarrollar un MVP?',
+    a: 'Desarrollamos MVPs funcionales en 4 a 6 semanas usando metodología spec-driven. Antes de escribir una línea de código, documentamos qué se construye, cómo se evalúa y qué queda fuera — lo que elimina sorpresas y retrasos en la mitad del proyecto.'
+  },
+  {
+    q: '¿En qué ciudades de México trabajan?',
+    a: 'Tenemos base en Ciudad de México y trabajamos con clientes en todo el país de forma remota. La mayoría de nuestros proyectos se gestionan completamente en línea, con comunicación directa sin intermediarios.'
+  },
+  {
+    q: '¿Qué incluye el diagnóstico gratuito?',
+    a: 'En 48 horas entregamos un mini-reporte con los hallazgos más importantes sobre tu sitio, producto o marca actual, más un video comentado de 5-10 minutos navegando tu proyecto. Sin compromiso y sin costo.'
+  },
+  {
+    q: '¿Trabajan con empresas pequeñas o solo empresas grandes?',
+    a: 'Trabajamos principalmente con PYMES mexicanas de 1 a 200 empleados en sectores como retail, salud, educación, servicios profesionales y tecnología. Nuestro modelo está diseñado para entregar resultados de calidad a precios accesibles para negocios en crecimiento.'
+  },
+  {
+    q: '¿Cuál es la diferencia entre producto digital y marca?',
+    a: 'El Track A de producto digital es para negocios que necesitan software: apps, plataformas, e-commerce o herramientas internas. El Track B de marca y presencia es para negocios que necesitan identidad visual, sitio web y estrategia digital. Muchos clientes necesitan ambos — el diagnóstico gratuito ayuda a definirlo.'
+  },
+  {
+    q: '¿Qué tecnologías usan para el desarrollo?',
+    a: 'Para desarrollo web y de producto usamos Next.js, React, TypeScript, Supabase y Vercel. Para diseño trabajamos con Figma. Todo el código es revisado por ingenieros senior antes de entrar a producción y la propiedad intelectual es 100% del cliente.'
+  },
+  {
+    q: '¿Cómo es el proceso de trabajo con Cauce?',
+    a: 'Nuestro proceso tiene tres pasos: primero investigamos el problema real con entrevistas y análisis, luego documentamos exactamente qué se construye antes de ejecutar, y finalmente construimos con un equipo completo. Cada avance es visible y testeable.'
+  },
+  {
+    q: '¿Por qué elegir Cauce sobre un freelancer o agencia grande?',
+    a: 'Un freelancer típicamente ejecuta sin diagnosticar. Una agencia grande cobra overhead de coordinación y pasa el proyecto entre equipos. Cauce combina la profundidad metodológica de una consultora con la velocidad y costo de un equipo independiente — investigamos antes de construir, con un solo equipo senior del inicio al final.'
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.a
+    }
+  }))
+};
+---
+
+<Base
+  title="Preguntas frecuentes — Cauce"
+  description="Respuestas sobre los servicios de diseño web, desarrollo de MVPs y branding de Cauce en CDMX."
+>
+  <Nav />
+  <main class="max-w-[680px] mx-auto px-5 py-16 lg:py-24">
+
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+    <h1 class="type-h1 text-ink mb-4">Preguntas frecuentes</h1>
+    <p class="type-body-lg text-stone mb-12">
+      Lo que nuestros clientes preguntan antes de trabajar con nosotros.
+    </p>
+
+    <div class="space-y-10">
+      {faqs.map(faq => (
+        <div>
+          <h2 class="type-h3 text-ink mb-3">{faq.q}</h2>
+          <p class="type-body text-ink">{faq.a}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-16 pt-10 border-t border-light-border">
+      <p class="type-h3 text-ink mb-4">¿Tienes una pregunta diferente?</p>
+      <a
+        href="/#auditoria"
+        class="type-cta inline-flex items-center justify-center
+               bg-accent text-white rounded-none px-8 h-14
+               hover:bg-accent-hover active:scale-[0.98] transition-all duration-150
+               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        Pide tu diagnóstico gratuito →
+      </a>
+    </div>
+
+    <a href="/" class="type-small text-stone underline hover:text-ink mt-12 inline-block">
+      ← Volver a cauce.tech
+    </a>
+  </main>
+  <Footer />
+</Base>

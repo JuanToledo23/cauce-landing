@@ -113,7 +113,7 @@ export const POST: APIRoute = async ({ request }) => {
   const emailFailed = await classify(emailResult, 'Resend Email');
 
   // Si el email de notificación falló, el equipo no se enterará — retornar error
-  // para que el cliente muestre el fallback con holacaucemx@gmail.com.
+  // para que el cliente muestre el fallback con hola@cauce.tech.
   if (emailFailed) {
     return jsonResponse({ error: 'No se pudo enviar la notificación' }, 500);
   }

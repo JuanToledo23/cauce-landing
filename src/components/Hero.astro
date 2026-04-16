@@ -89,23 +89,7 @@ const defaultVariant = heroVariants[abVariant] || heroVariants['A'];
 </section>
 
 <script>
-  import { heroVariants } from '../data/ab-variants';
   import { trackEvent } from '../utils/analytics';
-
-  document.addEventListener('ab:ready', ((e: Event) => {
-    const variant = (e as CustomEvent).detail.variant as 'A' | 'B' | 'C';
-    const data = heroVariants[variant];
-    if (!data) return;
-
-    const el = document.getElementById('hero-statement');
-    if (el) {
-      el.innerHTML = data.statement.map(l => `<span class="block">${l}</span>`).join('');
-      el.dataset.variant = variant;
-    }
-
-    const sub = document.getElementById('hero-sub');
-    if (sub) sub.textContent = data.subStatement;
-  }) as EventListener);
 
   document.getElementById('hero-cta')?.addEventListener('click', () => {
     const variant = document.getElementById('hero-statement')?.dataset.variant || 'A';
